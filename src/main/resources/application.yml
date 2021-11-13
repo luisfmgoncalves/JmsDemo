@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: omnikassa-pim-sofort
+
+server:
+  port: 8080
+
