@@ -11,7 +11,7 @@ import javax.jms.ConnectionFactory;
 @Configuration
 @EnableJms
 @Profile("activemq")
-public class activeMQConfig {
+public class ActiveMQConfig {
 
     @Bean(name = "topicJmsListenerContainerFactory")
     public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(ConnectionFactory connectionFactory) {
