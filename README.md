@@ -1,5 +1,4 @@
-#Intro
-
+# Intro
 This application shows how to:
  - Consume and process messages from an ActiveMQ broker instance.
  - Consume and process messages from a Kafka instance.
