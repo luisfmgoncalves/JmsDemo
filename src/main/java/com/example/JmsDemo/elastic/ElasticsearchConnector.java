@@ -1,4 +1,4 @@
-package com.example.JmsDemo.elk;
+package com.example.JmsDemo.elastic;
 
 import com.example.JmsDemo.model.Message;
 import lombok.extern.slf4j.Slf4j;
