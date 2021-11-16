@@ -28,8 +28,7 @@ public class KafkaConfig {
     private String bootstrapServers;
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Message>
-    kafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, Message> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, Message> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
