@@ -1,6 +1,6 @@
 package com.example.JmsDemo.model.converter;
 
-import com.example.JmsDemo.model.MessageResponse;
+import com.example.JmsDemo.model.ApiMessageResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.ZonedDateTime;
@@ -14,24 +14,26 @@ import static java.time.temporal.ChronoUnit.SECONDS;
 import static java.util.Optional.ofNullable;
 import static java.util.UUID.fromString;
 
-public class ElasticsearchSearchResponseToServerResponse {
+public class ElasticsearchSearchResponseToApiMessageResponse {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    private ElasticsearchSearchResponseToServerResponse() {
+    private ElasticsearchSearchResponseToApiMessageResponse() {
     }
 
-    public static MessageResponse toMessage(Map<String, Object> esDocument) {
-        return MessageResponse.builder()
-                .id(fromString(getStringValue(esDocument, ID)))
-                .content(getStringValue(esDocument, CONTENT))
-                .processed(getDateTimeValue(esDocument, PROCESSED))
-                .build();
+    public static ApiMessageResponse toMessageResponse(Map<String, Object> esDocument) {
+        return ApiMessageResponse.builder()
+                                 .id(fromString(getStringValue(esDocument, ID)))
+                                 .content(getStringValue(esDocument, CONTENT))
+                                 .processed(getDateTimeValue(esDocument, PROCESSED))
+                                 .build();
     }
 
     static String getStringValue(Map<String, Object> esDocument, String fieldName) {
-        Object value = esDocument.get(fieldName);
-        return value == null ? "" : objectMapper.convertValue(value, String.class);
+        return ofNullable(esDocument)
+                .map(map -> map.get(fieldName))
+                .map(value -> objectMapper.convertValue(value, String.class))
+                .orElse(null);
     }
 
     static String getDateTimeValue(Map<String, Object> esDocument, String fieldName) {

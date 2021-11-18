@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Value
 @Builder(toBuilder = true)
-public class MessageResponse {
+public class ApiMessageResponse {
     UUID id;
     String content;
     String processed;

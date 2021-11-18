@@ -8,18 +8,12 @@ import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-import static com.example.JmsDemo.model.converter.ElasticsearchMessageFieldNames.CONTENT;
-import static com.example.JmsDemo.model.converter.MessageToElasticIndexRequestConverter.toIndexRequest;
-import static org.elasticsearch.action.support.IndicesOptions.fromOptions;
+import static com.example.JmsDemo.model.converter.ElasticRequestConverter.toIndexRequest;
+import static com.example.JmsDemo.model.converter.ElasticRequestConverter.toSearchRequest;
 import static org.elasticsearch.client.RequestOptions.DEFAULT;
-import static org.elasticsearch.core.TimeValue.timeValueSeconds;
-import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
-import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 
 @Slf4j
 @Component
@@ -50,7 +44,7 @@ public class ElasticsearchConnector {
     }
 
     public Mono<SearchResponse> searchInMessageContent(String searchQuery) {
-        SearchRequest searchRequest = buildSearchRequest(searchQuery);
+        SearchRequest searchRequest = toSearchRequest(INDEX_NAME, searchQuery);
         return Mono.create(monoSink -> restHighLevelClient.searchAsync(searchRequest, DEFAULT, new ActionListener<>() {
             @Override
             public void onResponse(SearchResponse searchResponse) {
@@ -63,19 +57,5 @@ public class ElasticsearchConnector {
                 monoSink.error(e);
             }
         }));
-    }
-
-    private SearchRequest buildSearchRequest(String searchQuery) {
-        SearchSourceBuilder builder = new SearchSourceBuilder();
-        builder.timeout(timeValueSeconds(5));
-
-        BoolQueryBuilder boolQueryBuilder = boolQuery();
-        boolQueryBuilder.filter(termQuery(CONTENT, searchQuery));
-        builder.query(boolQueryBuilder);
-
-        SearchRequest searchRequest = new SearchRequest(INDEX_NAME);
-        searchRequest.indicesOptions(fromOptions(true, true, true, false));
-        searchRequest.source(builder);
-        return searchRequest;
     }
 }

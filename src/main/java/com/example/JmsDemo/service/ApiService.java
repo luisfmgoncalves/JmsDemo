@@ -1,12 +1,11 @@
 package com.example.JmsDemo.service;
 
 import com.example.JmsDemo.elastic.ElasticsearchConnector;
-import com.example.JmsDemo.model.MessageResponse;
-import com.example.JmsDemo.model.converter.ElasticsearchSearchResponseToServerResponse;
+import com.example.JmsDemo.model.ApiMessageResponse;
+import com.example.JmsDemo.model.converter.ElasticsearchSearchResponseToApiMessageResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -28,7 +27,6 @@ public class ApiService {
         this.elasticsearchConnector = elasticsearchConnector;
     }
 
-    @NotNull
     public Mono<ServerResponse> searchMessages(ServerRequest request) {
         String searchQuery = request.queryParam("query").orElse("");
         return elasticsearchConnector.searchInMessageContent(searchQuery)
@@ -38,10 +36,10 @@ public class ApiService {
                                                                   .bodyValue("Failed to request data from Elasticsearch"));
     }
 
-    public static List<MessageResponse> toMessageList(SearchResponse searchResponse) {
+    public static List<ApiMessageResponse> toMessageList(SearchResponse searchResponse) {
         return stream(searchResponse.getHits().getHits())
                 .map(SearchHit::getSourceAsMap)
-                .map(ElasticsearchSearchResponseToServerResponse::toMessage)
+                .map(ElasticsearchSearchResponseToApiMessageResponse::toMessageResponse)
                 .collect(toList());
     }
 }
