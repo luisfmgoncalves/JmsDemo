@@ -7,13 +7,13 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class JsonMessageToMessageConverter {
+public class JsonStringToMessageConverter {
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static Message fromString(String stringMessage) {
         try {
-            return OBJECT_MAPPER.readValue(stringMessage, Message.class);
+            return objectMapper.readValue(stringMessage, Message.class);
         } catch (Exception ex) {
             log.error("Could not deserialize {}", stringMessage, ex);
             return null;

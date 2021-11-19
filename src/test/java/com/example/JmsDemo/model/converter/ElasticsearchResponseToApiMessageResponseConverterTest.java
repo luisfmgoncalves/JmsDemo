@@ -11,7 +11,7 @@ import java.util.UUID;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-class ElasticsearchSearchResponseToApiMessageResponseTest {
+class ElasticsearchResponseToApiMessageResponseConverterTest {
 
     private static final UUID MESSAGE_ID = UUID.fromString("9c896b6d-cd20-46f5-9803-124cad0939b1");
     private static final String MESSAGE_CONTENT = "This is the message content";
@@ -22,7 +22,7 @@ class ElasticsearchSearchResponseToApiMessageResponseTest {
     void testCorrectMessageProperties() {
         Map<String, Object> elasticDocument = createElasticDocument();
 
-        ApiMessageResponse apiMessageResponse = ElasticsearchSearchResponseToApiMessageResponse.toMessageResponse(elasticDocument);
+        ApiMessageResponse apiMessageResponse = ElasticsearchResponseToApiMessageResponseConverter.toMessageResponse(elasticDocument);
 
         assertThat(apiMessageResponse.getId(), is(MESSAGE_ID));
         assertThat(apiMessageResponse.getContent(), is(MESSAGE_CONTENT));
@@ -35,7 +35,7 @@ class ElasticsearchSearchResponseToApiMessageResponseTest {
         Map<String, Object> elasticDocument = createElasticDocument();
         elasticDocument.put("processed", "2021-11-15T23:05:21.261356+01:00");
 
-        ApiMessageResponse apiMessageResponse = ElasticsearchSearchResponseToApiMessageResponse.toMessageResponse(elasticDocument);
+        ApiMessageResponse apiMessageResponse = ElasticsearchResponseToApiMessageResponseConverter.toMessageResponse(elasticDocument);
 
         assertThat(apiMessageResponse.getProcessed(), is("2021-11-15T23:05:21+01:00"));
     }

@@ -2,7 +2,7 @@ package com.example.JmsDemo.service;
 
 import com.example.JmsDemo.elastic.ElasticsearchConnector;
 import com.example.JmsDemo.model.ApiMessageResponse;
-import com.example.JmsDemo.model.converter.ElasticsearchSearchResponseToApiMessageResponse;
+import com.example.JmsDemo.model.converter.ElasticsearchResponseToApiMessageResponseConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.search.SearchHit;
@@ -39,7 +39,7 @@ public class ApiService {
     public static List<ApiMessageResponse> toMessageList(SearchResponse searchResponse) {
         return stream(searchResponse.getHits().getHits())
                 .map(SearchHit::getSourceAsMap)
-                .map(ElasticsearchSearchResponseToApiMessageResponse::toMessageResponse)
+                .map(ElasticsearchResponseToApiMessageResponseConverter::toMessageResponse)
                 .collect(toList());
     }
 }

@@ -14,11 +14,11 @@ import static java.time.temporal.ChronoUnit.SECONDS;
 import static java.util.Optional.ofNullable;
 import static java.util.UUID.fromString;
 
-public class ElasticsearchSearchResponseToApiMessageResponse {
+public class ElasticsearchResponseToApiMessageResponseConverter {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    private ElasticsearchSearchResponseToApiMessageResponse() {
+    private ElasticsearchResponseToApiMessageResponseConverter() {
     }
 
     public static ApiMessageResponse toMessageResponse(Map<String, Object> esDocument) {
