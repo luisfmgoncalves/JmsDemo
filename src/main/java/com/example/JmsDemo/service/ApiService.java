@@ -1,6 +1,5 @@
 package com.example.JmsDemo.service;
 
-import com.example.JmsDemo.elastic.ElasticsearchConnector;
 import com.example.JmsDemo.model.ApiMessageResponse;
 import com.example.JmsDemo.model.converter.ElasticsearchResponseToApiMessageResponseConverter;
 import lombok.extern.slf4j.Slf4j;
@@ -21,18 +20,18 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 @Service
 public class ApiService {
 
-    private final ElasticsearchConnector elasticsearchConnector;
+    private final ElasticsearchService elasticsearchService;
 
-    public ApiService(ElasticsearchConnector elasticsearchConnector) {
-        this.elasticsearchConnector = elasticsearchConnector;
+    public ApiService(ElasticsearchService elasticsearchService) {
+        this.elasticsearchService = elasticsearchService;
     }
 
     public Mono<ServerResponse> searchMessages(ServerRequest request) {
         String searchQuery = request.queryParam("query").orElse("");
-        return elasticsearchConnector.searchInMessageContent(searchQuery)
-                                     .flatMap(response -> ServerResponse.ok()
+        return elasticsearchService.searchInMessageContent(searchQuery)
+                                   .flatMap(response -> ServerResponse.ok()
                                                                         .bodyValue(toMessageList(response)))
-                                     .switchIfEmpty(ServerResponse.status(INTERNAL_SERVER_ERROR)
+                                   .switchIfEmpty(ServerResponse.status(INTERNAL_SERVER_ERROR)
                                                                   .bodyValue("Failed to request data from Elasticsearch"));
     }
 

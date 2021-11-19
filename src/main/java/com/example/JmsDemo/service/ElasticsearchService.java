@@ -1,4 +1,4 @@
-package com.example.JmsDemo.elastic;
+package com.example.JmsDemo.service;
 
 import com.example.JmsDemo.model.Message;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +17,13 @@ import static org.elasticsearch.client.RequestOptions.DEFAULT;
 
 @Slf4j
 @Component
-public class ElasticsearchConnector {
+public class ElasticsearchService {
 
     private static final String INDEX_NAME = "message";
 
     private final RestHighLevelClient restHighLevelClient;
 
-    public ElasticsearchConnector(RestHighLevelClient restHighLevelClient) {
+    public ElasticsearchService(RestHighLevelClient restHighLevelClient) {
         this.restHighLevelClient = restHighLevelClient;
     }
 

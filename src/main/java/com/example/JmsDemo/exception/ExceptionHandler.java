@@ -14,7 +14,9 @@ public final class ExceptionHandler {
     }
 
     public static Mono<ServerResponse> wrapException(Throwable throwable, ServerRequest request) {
-        //TODO: Handle any exceptions thrown during an api request
+
+        //TODO: Handle any exceptions thrown during an api requests
+
         log.error("Exception thrown for request: {}:{}. {}", request.path(), request.methodName(), throwable.getMessage());
 
         return ServerResponse.status(HttpStatus.I_AM_A_TEAPOT)

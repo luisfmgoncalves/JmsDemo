@@ -1,6 +1,5 @@
 package com.example.JmsDemo.service;
 
-import com.example.JmsDemo.elastic.ElasticsearchConnector;
 import com.example.JmsDemo.model.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.index.IndexResponse;
@@ -14,10 +13,10 @@ import static org.elasticsearch.rest.RestStatus.CREATED;
 @Slf4j
 public class MessageService {
 
-    private final ElasticsearchConnector connector;
+    private final ElasticsearchService connector;
 
-    public MessageService(ElasticsearchConnector elasticsearchConnector) {
-        this.connector = elasticsearchConnector;
+    public MessageService(ElasticsearchService elasticsearchService) {
+        this.connector = elasticsearchService;
     }
 
     public void processMessage(Message message) {
