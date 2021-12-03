@@ -36,9 +36,11 @@ public class ApiService {
     }
 
     public static List<ApiMessageResponse> toMessageList(SearchResponse searchResponse) {
+        System.err.println("test");
         return stream(searchResponse.getHits().getHits())
                 .map(SearchHit::getSourceAsMap)
                 .map(ElasticsearchResponseToApiMessageResponseConverter::toMessageResponse)
                 .collect(toList());
+
     }
 }
