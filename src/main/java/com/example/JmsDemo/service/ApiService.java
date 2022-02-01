@@ -29,14 +29,11 @@ public class ApiService {
     public Mono<ServerResponse> searchMessages(ServerRequest request) {
         String searchQuery = request.queryParam("query").orElse("");
         return elasticsearchService.searchInMessageContent(searchQuery)
-                                   .flatMap(response -> ServerResponse.ok()
-                                                                        .bodyValue(toMessageList(response)))
-                                   .switchIfEmpty(ServerResponse.status(INTERNAL_SERVER_ERROR)
-                                                                  .bodyValue("Failed to request data from Elasticsearch"));
+                                   .flatMap(response -> ServerResponse.ok().bodyValue(toMessageList(response)))
+                                   .switchIfEmpty(ServerResponse.status(INTERNAL_SERVER_ERROR).bodyValue("Failed to request data from Elasticsearch"));
     }
 
-    public static List<ApiMessageResponse> toMessageList(SearchResponse searchResponse) {
-        System.err.println("test");
+    private List<ApiMessageResponse> toMessageList(SearchResponse searchResponse) {
         return stream(searchResponse.getHits().getHits())
                 .map(SearchHit::getSourceAsMap)
                 .map(ElasticsearchResponseToApiMessageResponseConverter::toMessageResponse)

@@ -1,5 +1,6 @@
 package com.example.JmsDemo.service;
 
+import com.example.JmsDemo.exception.ElasticsearchException;
 import com.example.JmsDemo.model.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.ActionListener;
@@ -13,6 +14,7 @@ import reactor.core.publisher.Mono;
 
 import static com.example.JmsDemo.model.converter.ElasticRequestConverter.toIndexRequest;
 import static com.example.JmsDemo.model.converter.ElasticRequestConverter.toSearchRequest;
+import static java.lang.String.format;
 import static org.elasticsearch.client.RequestOptions.DEFAULT;
 
 @Slf4j
@@ -37,8 +39,7 @@ public class ElasticsearchService {
 
             @Override
             public void onFailure(Exception e) {
-                log.warn("Failed to perform index request for message : {}", message.toString());
-                monoSink.error(e);
+                throw new ElasticsearchException(format("Failed to index message %s in Elasticsearch.", message.toString()), e);
             }
         }));
     }
@@ -53,8 +54,7 @@ public class ElasticsearchService {
 
             @Override
             public void onFailure(Exception e) {
-                log.warn("Failed to perform search request for query : {}", searchQuery);
-                monoSink.error(e);
+                throw new ElasticsearchException(format("Failed to perform search in elasticsearch : %s", e.getMessage()), e);
             }
         }));
     }

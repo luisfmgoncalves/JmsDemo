@@ -17,6 +17,12 @@ public final class ExceptionHandler {
 
         log.error("Exception thrown for request: {}:{}. {}", request.path(), request.methodName(), throwable.getMessage());
 
+        if(throwable instanceof ElasticsearchException) {
+            return ServerResponse.status(HttpStatus.SERVICE_UNAVAILABLE)
+                                 .contentType(APPLICATION_JSON)
+                                 .bodyValue("Error occurred while contract Elasticsearch. Please try again laer.");
+        }
+
         return ServerResponse.status(HttpStatus.I_AM_A_TEAPOT)
                              .contentType(APPLICATION_JSON)
                              .bodyValue("Grab a tea cause this is not working.");
