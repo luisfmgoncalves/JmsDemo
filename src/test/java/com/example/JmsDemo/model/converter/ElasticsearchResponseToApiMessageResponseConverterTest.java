@@ -1,6 +1,6 @@
 package com.example.JmsDemo.model.converter;
 
-import com.example.JmsDemo.model.ApiMessageResponse;
+import com.example.JmsDemo.model.api.ApiMessageResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

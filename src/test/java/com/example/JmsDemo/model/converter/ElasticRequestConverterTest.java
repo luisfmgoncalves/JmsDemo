@@ -79,7 +79,8 @@ class ElasticRequestConverterTest {
     void testValidMessageSource() {
         SearchRequest searchRequest = ElasticRequestConverter.toSearchRequest(INDEX_NAME, SEARCH_QUERY);
 
-        String relevantRequestPattern = format("\"query\":{\"bool\":{\"filter\":[{\"term\":{\"content\":{\"value\":\"%s\",\"boost\":1.0}}}]", SEARCH_QUERY);
+        String relevantRequestPattern = """
+                "query":{"bool":{"filter":[{"term":{"content":{"value":"%s","boost":1.0}}}]""".formatted(SEARCH_QUERY);
         String requestString = searchRequest.source().toString();
         assertThat(requestString.contains(relevantRequestPattern), is(TRUE));
     }

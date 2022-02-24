@@ -1,4 +1,4 @@
-package com.example.JmsDemo.model;
+package com.example.JmsDemo.model.api;
 
 import lombok.Builder;
 import lombok.Value;

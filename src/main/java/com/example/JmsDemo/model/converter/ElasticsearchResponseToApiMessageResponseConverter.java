@@ -1,6 +1,6 @@
 package com.example.JmsDemo.model.converter;
 
-import com.example.JmsDemo.model.ApiMessageResponse;
+import com.example.JmsDemo.model.api.ApiMessageResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.ZonedDateTime;

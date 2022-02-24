@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-import static java.lang.String.format;
 import static java.util.UUID.fromString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -20,7 +19,9 @@ class JsonStringToMessageConverterTest {
     @Test
     @DisplayName("Test successful conversion from json string to Message object")
     void testSuccessdulConversionToMessage() {
-        String jsonMessage = format("{\"id\":\"%s\",\"content\" : \"%s\"}", MESSAGE_ID.toString(), MESSAGE_CONTENT);
+        String jsonMessage = """
+                {"id":"%s","content" : "%s"}"
+                """.formatted(MESSAGE_ID, MESSAGE_CONTENT);
 
         Message message = JsonStringToMessageConverter.fromString(jsonMessage);
 
@@ -31,7 +32,9 @@ class JsonStringToMessageConverterTest {
     @Test
     @DisplayName("Test failed conversion from json string to Message object")
     void testFailedConversionToMessage() {
-        String jsonMessage = format("{\"id\":\"%s\",\"content\" : \"%s\"}", "invalid", MESSAGE_CONTENT);
+        String jsonMessage = """
+                {"id":"%s","content" : "%s"}"
+                """.formatted("invalid", MESSAGE_CONTENT);
 
         Message message = JsonStringToMessageConverter.fromString(jsonMessage);
 

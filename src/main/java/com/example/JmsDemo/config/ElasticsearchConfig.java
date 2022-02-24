@@ -30,4 +30,7 @@ public class ElasticsearchConfig {
                                   .setDefaultCredentialsProvider(credentialsProvider))
         );
     }
+
+
+
 }
