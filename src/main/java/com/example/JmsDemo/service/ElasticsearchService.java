@@ -1,59 +1,52 @@
 package com.example.JmsDemo.service;
 
+import co.elastic.clients.elasticsearch.ElasticsearchAsyncClient;
+import co.elastic.clients.elasticsearch.core.IndexResponse;
+import co.elastic.clients.elasticsearch.core.search.Hit;
+import com.example.JmsDemo.exception.ElasticsearchException;
 import com.example.JmsDemo.model.Message;
+import com.example.JmsDemo.model.api.ApiMessage;
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.action.ActionListener;
-import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.action.search.SearchRequest;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.client.RestHighLevelClient;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import static com.example.JmsDemo.model.converter.ElasticRequestConverter.toIndexRequest;
-import static com.example.JmsDemo.model.converter.ElasticRequestConverter.toSearchRequest;
-import static org.elasticsearch.client.RequestOptions.DEFAULT;
-
+@Service
 @Slf4j
-@Component
 public class ElasticsearchService {
 
-    private static final String INDEX_NAME = "message";
+    private static final String INDEX_NAME = "messages";
+    private static final String MESSAGE_CONTENT_FIELD = "content";
 
-    private final RestHighLevelClient restHighLevelClient;
+    private final ElasticsearchAsyncClient elasticsearchAsyncClient;
 
-    public ElasticsearchService(RestHighLevelClient restHighLevelClient) {
-        this.restHighLevelClient = restHighLevelClient;
+    public ElasticsearchService(ElasticsearchAsyncClient elasticsearchAsyncClient) {
+        this.elasticsearchAsyncClient = elasticsearchAsyncClient;
     }
 
     public Mono<IndexResponse> indexMessage(Message message) {
-        IndexRequest indexRequest = toIndexRequest(INDEX_NAME, message);
-        return Mono.create(monoSink -> restHighLevelClient.indexAsync(indexRequest, DEFAULT, new ActionListener<>() {
-            @Override
-            public void onResponse(IndexResponse indexResponse) {
-                monoSink.success(indexResponse);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                monoSink.error(e);
-            }
-        }));
+            return Mono.fromFuture(elasticsearchAsyncClient.index(b -> b.
+                            index(INDEX_NAME).id(message.getId().toString()).document(message)))
+                    .doOnSuccess(indexResponse -> {
+                        if (!"created".equalsIgnoreCase(indexResponse.result().jsonValue())) {
+                            log.warn("Expected 'created' response from Elasticsearch but got {}", indexResponse.result().jsonValue());
+                        }
+                        log.info("Successfully indexed message in Elasticsearch.");
+                    })
+                    .onErrorMap(ex -> new ElasticsearchException("Error occurred while indexing data", ex));
     }
 
-    public Mono<SearchResponse> searchInMessageContent(String searchQuery) {
-        SearchRequest searchRequest = toSearchRequest(INDEX_NAME, searchQuery);
-        return Mono.create(monoSink -> restHighLevelClient.searchAsync(searchRequest, DEFAULT, new ActionListener<>() {
-            @Override
-            public void onResponse(SearchResponse searchResponse) {
-                monoSink.success(searchResponse);
-            }
-
-            @Override
-            public void onFailure(Exception e) {
-                monoSink.error(e);
-            }
-        }));
+    //search for a string in the message content
+    public Flux<ApiMessage> searchInMessageContent(String query) {
+            return Mono.fromFuture(elasticsearchAsyncClient.search(s -> s
+                            .index(INDEX_NAME)
+                            .query(q -> q
+                                    .intervals(i -> i
+                                            .field(MESSAGE_CONTENT_FIELD).allOf(a -> a
+                                                    .intervals(in -> in
+                                                            .match(m -> m.query(query)))))), ApiMessage.class))
+                    .doOnNext(result -> log.info("Successfully retrieved {} messages from Elasticsearch", result.hits().hits().size()))
+                    .flatMapMany(stream -> Flux.fromIterable(stream.hits().hits().stream().map(Hit::source).toList()))
+                    .onErrorMap(ex -> new ElasticsearchException("Error occurred while fetching data", ex));
     }
 }

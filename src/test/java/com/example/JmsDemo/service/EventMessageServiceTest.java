@@ -2,10 +2,11 @@ package com.example.JmsDemo.service;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import co.elastic.clients.elasticsearch._types.Result;
+import co.elastic.clients.elasticsearch._types.ShardStatistics;
+import co.elastic.clients.elasticsearch.core.IndexResponse;
 import com.example.JmsDemo.TestLoggingUtils;
 import com.example.JmsDemo.model.Message;
-import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.index.shard.ShardId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class MessageServiceTest {
+class EventMessageServiceTest {
 
     private static final UUID ID = UUID.fromString("9c896b6d-cd20-46f5-9803-124cad0939b1");
 
@@ -35,17 +36,17 @@ class MessageServiceTest {
     private TestLoggingUtils loggingUtils;
     private Message message;
 
-    private MessageService testSubject;
+    private EventMessageService testSubject;
 
     @BeforeEach
     void setup() {
-        loggingUtils = new TestLoggingUtils(MessageService.class);
+        loggingUtils = new TestLoggingUtils(EventMessageService.class);
         message = Message.builder()
                          .id(ID)
                          .content("This is a message")
                          .build();
 
-        testSubject = new MessageService(elasticsearchService);
+        testSubject = new EventMessageService(elasticsearchService);
     }
 
     @Test
@@ -76,7 +77,18 @@ class MessageServiceTest {
 
     private IndexResponse mockIndexResponse() {
         //IndexResponse[index=message,type=_doc,id=9c896b6d-cd20-46f5-9803-124cad0939b1,version=1,result=created,seqNo=0,primaryTerm=1,shards={"total":2,"successful":1,"failed":0}]
-        ShardId shardId = new ShardId("message", "51980211-ef30-4543-b061-32ebded8b5f9", 1);
-        return new IndexResponse(shardId, "_doc", "9c896b6d-cd20-46f5-9803-124cad0939b1", 0, 1, 1, false);
+        ShardStatistics shards = new ShardStatistics.Builder()
+                .failed(0)
+                .successful(1)
+                .total(1)
+                .build();
+
+        return IndexResponse.of(s -> s.index("message")
+                .id("51980211-ef30-4543-b061-32ebded8b5f9")
+                .version(1)
+                .primaryTerm(1)
+                .shards(shards)
+                .seqNo(0)
+                .result(Result.Created));
     }
 }

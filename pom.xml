@@ -17,7 +17,7 @@
 		<java.version>17</java.version>
 		<lombok.version>1.18.22</lombok.version>
 		<jackson-datatype.version>2.13.1</jackson-datatype.version>
-		<elasticsearch.version>7.14.0</elasticsearch.version>
+		<elasticsearch.version>8.0.1</elasticsearch.version>
 		<wiremock.version>2.32.0</wiremock.version>
 	</properties>
 	<dependencies>
@@ -47,19 +47,19 @@
 			<artifactId>spring-kafka</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.elasticsearch</groupId>
-			<artifactId>elasticsearch</artifactId>
+			<groupId>co.elastic.clients</groupId>
+			<artifactId>elasticsearch-java</artifactId>
 			<version>${elasticsearch.version}</version>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>co.elastic.clients</groupId>-->
-<!--			<artifactId>elasticsearch-java</artifactId>-->
-<!--			<version>${elasticsearch.version}</version>-->
-<!--		</dependency>-->
 		<dependency>
-			<groupId>org.elasticsearch.client</groupId>
-			<artifactId>elasticsearch-rest-high-level-client</artifactId>
-			<version>${elasticsearch.version}</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.12.3</version>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.json</groupId>
+			<artifactId>jakarta.json-api</artifactId>
+			<version>2.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -82,6 +82,12 @@
 			<groupId>com.github.tomakehurst</groupId>
 			<artifactId>wiremock-jre8</artifactId>
 			<version>${wiremock.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>elasticsearch</artifactId>
+			<version>1.16.3</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
