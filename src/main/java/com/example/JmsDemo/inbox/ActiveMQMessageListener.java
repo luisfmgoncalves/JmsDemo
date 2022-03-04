@@ -2,7 +2,7 @@ package com.example.JmsDemo.inbox;
 
 import com.example.JmsDemo.model.Message;
 import com.example.JmsDemo.model.converter.JsonStringToMessageConverter;
-import com.example.JmsDemo.service.MessageService;
+import com.example.JmsDemo.service.EventMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jms.annotation.JmsListener;
@@ -16,9 +16,9 @@ public class ActiveMQMessageListener {
     private static final String TOPIC_NAME = "example-topic";
     private static final String SUBSCRIPTION_NAME = "example-topic-subscription";
 
-    private final MessageService messageService;
+    private final EventMessageService messageService;
 
-    public ActiveMQMessageListener(MessageService messageService) {
+    public ActiveMQMessageListener(EventMessageService messageService) {
         this.messageService = messageService;
     }
 
