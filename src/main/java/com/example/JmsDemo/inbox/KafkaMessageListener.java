@@ -22,7 +22,7 @@ public class KafkaMessageListener implements MessageListener {
     }
 
     @KafkaListener(topics = TOPIC_NAME, containerFactory = "kafkaListenerContainerFactory", groupId = SUBSCRIPTION_NAME)
-    public void receiveMessage(Message message) {
+    public void receive(Message message) {
         messageService.processMessage(message);
     }
 

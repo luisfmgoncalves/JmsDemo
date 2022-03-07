@@ -22,7 +22,7 @@ public class ActiveMQMessageListener implements MessageListener {
     }
 
     @JmsListener(destination = TOPIC_NAME, containerFactory = "topicJmsListenerContainerFactory", subscription = SUBSCRIPTION_NAME)
-    public void receiveMessage(Message message) {
+    public void receive(Message message) {
         messageService.processMessage(message);
     }
 

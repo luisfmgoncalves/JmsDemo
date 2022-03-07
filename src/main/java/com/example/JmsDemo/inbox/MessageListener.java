@@ -11,6 +11,6 @@ public interface MessageListener {
      * Receives a published message
      * @param message - the received message
      */
-    void receiveMessage(Message message);
+    void receive(Message message);
 
 }
