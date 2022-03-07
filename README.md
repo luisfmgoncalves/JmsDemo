@@ -39,7 +39,7 @@ A topic is automatically created when a message is send to it, so just use the f
 ```
 curl -X POST 'http://admin:admin@localhost:8161/api/message?destination=topic://example-topic&_type=com.example.JmsDemo.model.Message' -H 'Content-Type: application/json' -d '{"id":"9c896b6d-cd20-46f5-9803-124cad0939b1", "content":"This is the message content"}'
 ```
-NOTE: The `_type` parameter in the curl command contains specifies the fully qualified name of the Message object.
+NOTE: The `_type` parameter in the curl command specifies the fully qualified name of the Message object.
 
 ##### Kafka
 To connect to an existing Kafka instance, update `spring.kafka.bootstrap-servers` in the `application-kafka.yml` file.  
