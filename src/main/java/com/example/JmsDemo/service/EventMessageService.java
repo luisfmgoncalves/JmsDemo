@@ -22,7 +22,7 @@ public class EventMessageService {
     public void processMessage(Message message) {
         ofNullable(message)
                 .filter(m -> m.getId() != null)
-                .map(m -> m.toBuilder().processed(now()).build()) //message processed now!
+                .map(m -> m.toBuilder().processed(now()).build())
                 .ifPresent(m -> indexMessage(m).subscribe());
     }
 

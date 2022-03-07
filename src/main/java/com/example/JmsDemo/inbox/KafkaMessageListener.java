@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Profile("kafka")
 @Component
-public class KafkaMessageListener {
+public class KafkaMessageListener implements MessageListener {
 
     private static final String TOPIC_NAME = "example-topic";
     private static final String SUBSCRIPTION_NAME = "example-topic-subscription";
@@ -22,7 +22,7 @@ public class KafkaMessageListener {
     }
 
     @KafkaListener(topics = TOPIC_NAME, containerFactory = "kafkaListenerContainerFactory", groupId = SUBSCRIPTION_NAME)
-    void receiveMessage(Message message) {
+    public void receiveMessage(Message message) {
         messageService.processMessage(message);
     }
 

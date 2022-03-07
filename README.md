@@ -37,8 +37,9 @@ Otherwise, you can find a docker-compose file [here](https://github.com/luisfmgo
 If you use the container, the ActiveMQ broker manager will be accessible at [http://localhost:8161/admin](http://localhost:8161/admin). Sign in with `admin:admin`.
 A topic is automatically created when a message is send to it, so just use the following command to send a message:
 ```
-curl -X POST 'http://admin:admin@localhost:8161/api/message?destination=topic://example-topic' -H 'Content-Type: application/json' -d '{"id":"9c896b6d-cd20-46f5-9803-124cad0939b1", "content":"This is the message content"}'
+curl -X POST 'http://admin:admin@localhost:8161/api/message?destination=topic://example-topic&_type=com.example.JmsDemo.model.Message' -H 'Content-Type: application/json' -d '{"id":"9c896b6d-cd20-46f5-9803-124cad0939b1", "content":"This is the message content"}'
 ```
+NOTE: The `_type` parameter in the curl command contains specifies the fully qualified name of the Message object.
 
 ##### Kafka
 To connect to an existing Kafka instance, update `spring.kafka.bootstrap-servers` in the `application-kafka.yml` file.  
