@@ -12,12 +12,20 @@ This application:
 ### Requirements
 This application requires an Elasticseach instance. See the setup section to see how to set that up.
 
-
 ### Run application
 Use profiles `activemq` and `kafka` to start the application to connect to the desired message provider.
 ```
 mvn spring-boot:run -Dspring-boot.run.profiles=<profile_name>
 ```
+
+### Run the tests
+To run the tests you can simply execute
+```
+mvn clean install
+```
+_Note_: The integration tests start an instance of Elasticsearch which should be available in the Docker instance while
+the tests are running.
+
 
 ### API
 This application exposed one endpoint to performs text search on all messages in Elasticserch.
@@ -28,7 +36,6 @@ curl --location --request GET 'localhost:8080/search?query=content'
 
 ### Setup
 Section that describes the integration setup with the different tools.
-
 
 ##### ActiveMQ
 To connect to an existing ActriveMQ instance, update `spring.activemq.broker-url` in the `application-activemq.yml` file.  
