@@ -27,7 +27,6 @@ public class ElasticsearchService {
     public Mono<IndexResponse> indexMessage(Message message) {
             return Mono.fromFuture(elasticsearchAsyncClient.index(b -> b.
                             index(INDEX_NAME).id(message.getId().toString()).document(message)))
-                    .doOnSuccess(indexResponse -> log.info("Successfully indexed message in Elasticsearch."))
                     .onErrorMap(ex -> new ElasticsearchException("Error occurred while indexing data", ex));
     }
 

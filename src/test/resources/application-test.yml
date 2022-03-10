@@ -4,6 +4,6 @@ spring:
 
 elasticsearch:
   host: localhost
-  port: 9200
+  port: 1200
   user: elastic
   pass: elastic

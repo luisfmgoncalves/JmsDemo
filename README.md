@@ -57,5 +57,6 @@ Use [Conduktor](https://www.conduktor.io/) to send messages to topics
 ##### Elasticsearch
 To connect to an existing Elasticsearch instance, update `elasticsearch.*` properties in the `application.yml` file.  
 
-Otherwise, you can find a docker-compose file [here](https://github.com/luisfmgoncalves/docker/tree/master/elk) to start an instance locally.
-Kibana can be used to look at the messages indexed in elasticsearch.
+Otherwise, you can find a docker-compose file in `/docker` to start an instance locally.
+That same docker compose file can be used to start a Kibana, Logstash and Heartbeat instances which makes monitoring avaialble
+to this application.

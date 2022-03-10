@@ -23,7 +23,10 @@ public class EventMessageService {
         ofNullable(message)
                 .filter(m -> m.getId() != null)
                 .map(m -> m.toBuilder().processed(now()).build())
-                .ifPresent(m -> indexMessage(m).subscribe());
+                .ifPresent(m -> {
+                    log.info("Received message {}. Processing it...", m.getId());
+                    indexMessage(m).subscribe();
+                });
     }
 
     private Mono<IndexResponse> indexMessage(Message message) {
