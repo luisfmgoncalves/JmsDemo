@@ -1,6 +1,6 @@
 ### Intro
 
-![Alt text](https://raw.githubusercontent.com/luisfmgoncalves/JmsDemo/master/docs/JmsDemo.svg)  
+![Alt text](./docs/JmsDemo.svg)  
 
 
 This application:
@@ -58,5 +58,10 @@ Use [Conduktor](https://www.conduktor.io/) to send messages to topics
 To connect to an existing Elasticsearch instance, update `elasticsearch.*` properties in the `application.yml` file.  
 
 Otherwise, you can find a docker-compose file in `/docker` to start an instance locally.
-That same docker compose file can be used to start a Kibana, Logstash and Heartbeat instances which makes monitoring avaialble
-to this application.
+
+### Monitoring
+Elasticsearch is used not only for storing the messages processed from the events, but also for monitoring purposes.  
+The docker-compose file present in `/docker` can be used to start a Kibana, Logstash and Heartbeat instances which makes monitoring available for this application.  
+Below is an image showing the different ELK components involved in the monitoring process:
+
+![Alt text](./docs/Monitoring.svg)  
