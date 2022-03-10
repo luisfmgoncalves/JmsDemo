@@ -27,16 +27,9 @@ public class ElasticsearchService {
     public Mono<IndexResponse> indexMessage(Message message) {
             return Mono.fromFuture(elasticsearchAsyncClient.index(b -> b.
                             index(INDEX_NAME).id(message.getId().toString()).document(message)))
-                    .doOnSuccess(indexResponse -> {
-                        if (!"created".equalsIgnoreCase(indexResponse.result().jsonValue())) {
-                            log.warn("Expected 'created' response from Elasticsearch but got {}", indexResponse.result().jsonValue());
-                        }
-                        log.info("Successfully indexed message in Elasticsearch.");
-                    })
                     .onErrorMap(ex -> new ElasticsearchException("Error occurred while indexing data", ex));
     }
 
-    //search for a string in the message content
     public Flux<ApiMessage> searchInMessageContent(String query) {
             return Mono.fromFuture(elasticsearchAsyncClient.search(s -> s
                             .index(INDEX_NAME)

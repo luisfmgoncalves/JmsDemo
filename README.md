@@ -1,6 +1,6 @@
 ### Intro
 
-![Alt text](https://raw.githubusercontent.com/luisfmgoncalves/JmsDemo/master/docs/JmsDemo.svg)  
+![Alt text](./docs/JmsDemo.svg)  
 
 
 This application:
@@ -12,12 +12,20 @@ This application:
 ### Requirements
 This application requires an Elasticseach instance. See the setup section to see how to set that up.
 
-
 ### Run application
 Use profiles `activemq` and `kafka` to start the application to connect to the desired message provider.
 ```
 mvn spring-boot:run -Dspring-boot.run.profiles=<profile_name>
 ```
+
+### Run the tests
+To run the tests you can simply execute
+```
+mvn clean install
+```
+_Note_: The integration tests start an instance of Elasticsearch which should be available in the Docker instance while
+the tests are running.
+
 
 ### API
 This application exposed one endpoint to performs text search on all messages in Elasticserch.
@@ -28,7 +36,6 @@ curl --location --request GET 'localhost:8080/search?query=content'
 
 ### Setup
 Section that describes the integration setup with the different tools.
-
 
 ##### ActiveMQ
 To connect to an existing ActriveMQ instance, update `spring.activemq.broker-url` in the `application-activemq.yml` file.  
@@ -50,5 +57,11 @@ Use [Conduktor](https://www.conduktor.io/) to send messages to topics
 ##### Elasticsearch
 To connect to an existing Elasticsearch instance, update `elasticsearch.*` properties in the `application.yml` file.  
 
-Otherwise, you can find a docker-compose file [here](https://github.com/luisfmgoncalves/docker/tree/master/elk) to start an instance locally.
-Kibana can be used to look at the messages indexed in elasticsearch.
+Otherwise, you can find a docker-compose file in `/docker` to start an instance locally.
+
+### Monitoring
+Elasticsearch is used not only for storing the messages processed from the events, but also for monitoring purposes.  
+The docker-compose file present in `/docker` can be used to start a Kibana, Logstash and Heartbeat instances which makes monitoring available for this application.  
+Below is an image showing the different ELK components involved in the monitoring process:
+
+![Alt text](./docs/Monitoring.svg)  

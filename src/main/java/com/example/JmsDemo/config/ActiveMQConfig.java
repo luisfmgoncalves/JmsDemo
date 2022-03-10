@@ -1,5 +1,6 @@
 package com.example.JmsDemo.config;
 
+import org.apache.activemq.ActiveMQConnectionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -18,11 +19,15 @@ public class ActiveMQConfig {
 
     @Bean(name = "topicJmsListenerContainerFactory")
     public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(ConnectionFactory connectionFactory) {
+        ActiveMQConnectionFactory activeMQConnectionFactory  = new ActiveMQConnectionFactory();
+        activeMQConnectionFactory.setClientID("jmsdemo");
+
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory);
+        factory.setConnectionFactory(activeMQConnectionFactory);
         factory.setMessageConverter(jacksonJmsMessageConverter());
+        factory.setSubscriptionDurable(true);
         factory.setPubSubDomain(true);
-        factory.setConcurrency("1-5");
+        factory.setConcurrency("1");
         return factory;
     }
 

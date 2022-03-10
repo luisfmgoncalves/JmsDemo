@@ -10,3 +10,6 @@ elasticsearch:
   port: 9200
   user: elastic
   pass: elastic
+
+logging:
+  file: /Users/luisg/jms_demo.log

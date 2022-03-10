@@ -1,0 +1,41 @@
+heartbeat.monitors:
+  - type: http
+    enabled: true
+    id: jms-demo-monitor
+    name: Monitoring for JmsDemo application
+    urls:
+      - http://host.docker.internal:8080/actuator/health
+    schedule: '@every 10s'
+    check.response:
+      status: 200
+
+  - type: http
+    enables: true
+    id: elasticsearch-monitor
+    name: Monitoring for Elasticsearch
+    urls:
+      - http://elasticsearch:9200/_cat/health
+    username: elastic
+    password: elastic
+    schedule: '@every 10s'
+    check.response:
+      status: 200
+
+output.elasticsearch:
+  hosts: ["elasticsearch:9200"]
+  username: elastic
+  password: elastic
+
+setup.kibana:
+  host: "kibana:5601"
+
+processors:
+  - add_host_metadata:
+      cache.ttl: 5m
+      geo:
+        name: amsterdam
+        location: 52.3676, 4.9041
+        continent_name: Europe
+        country_iso_code: NL
+        region_iso_code: NY
+        city_name: Amsterdam

@@ -1,0 +1,3 @@
+- pipeline.id: jms_demo_logging_pipeline
+  path.config: "/usr/share/logstash/config/jms_demo_logging.conf"
+  pipeline.workers: 3

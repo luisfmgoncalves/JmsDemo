@@ -1,0 +1,103 @@
+version: "3.8"
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
+    container_name: elasticsearch
+    environment:
+      - node.name=elasticsearch
+      - cluster.name=elastic-cluster
+      - cluster.initial_master_nodes=elasticsearch
+      - bootstrap.memory_lock=true
+      - discovery.type:single-node
+      - xpack.security.enabled=true
+      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.transport.ssl.verification_mode=certificate
+      - xpack.security.transport.ssl.keystore.type=PKCS12
+      - xpack.security.transport.ssl.keystore.path=certificates.p12
+      - xpack.security.transport.ssl.truststore.type=PKCS12
+      - xpack.security.transport.ssl.truststore.path=certificates.p12
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
+      - ./certificates.p12:/usr/share/elasticsearch/config/certificates.p12
+    ports:
+      - 9200:9200
+    networks:
+      - elastic
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
+    container_name: kibana
+    environment:
+      ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+      ELASTICSEARCH_USERNAME: "kibana"
+      ELASTICSEARCH_PASSWORD: "kibana"
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+    networks:
+      - elastic
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:${ELK_VERSION}
+    container_name: logstash
+    volumes:
+      - ./logstash/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./logstash/pipelines.yml:/usr/share/logstash/config/pipelines.yml
+      - ./logstash/pipelines/jms_demo_logging.conf:/usr/share/logstash/config/jms_demo_logging.conf
+      #binds the local directory containing the log files to a directory in the container
+      - type: bind
+        source: /Users/luisg/logs
+        target: /usr/share/logstash/logs
+    ports:
+      - 9600:9600
+    depends_on:
+      - elasticsearch
+    networks:
+      - elastic
+
+  heartbeat:
+    image: docker.elastic.co/beats/heartbeat:${ELK_VERSION}
+    container_name: heartbeat
+    volumes:
+      - ./heartbeat/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml
+    command: heartbeat -e -strict.perms=false
+    depends_on:
+      - elasticsearch
+    networks:
+      - elastic
+
+# TODO:
+#  apm:
+#    image: docker.elastic.co/apm/apm-server:${ELK_VERSION}
+#    container_name: apm
+#    cap_add: [ "CHOWN", "DAC_OVERRIDE", "SETGID", "SETUID" ]
+#    cap_drop: [ "ALL" ]
+#    ports:
+#      - 8200:8200
+#    command: >
+#      apm-server -e
+#        -E apm-server.rum.enabled=true
+#        -E setup.kibana.host=kibana:5601
+#        -E setup.template.settings.index.number_of_replicas=0
+#        -E apm-server.kibana.enabled=true
+#        -E apm-server.kibana.host=kibana:5601
+#        -E output.elasticsearch.hosts=["elasticsearch:9200"]
+#    healthcheck:
+#      interval: 10s
+#      retries: 12
+#      test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:8200/
+
+volumes:
+  esdata1:
+    driver: local
+
+networks:
+  elastic:
+    driver: bridge
