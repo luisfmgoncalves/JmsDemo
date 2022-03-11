@@ -92,6 +92,9 @@
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore-nio:4.4.15" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.15" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.parsson:parsson:1.0.0" level="project" />
+    <orderEntry type="library" name="Maven: co.elastic.apm:apm-agent-attach:1.29.0" level="project" />
+    <orderEntry type="library" name="Maven: net.java.dev.jna:jna:5.3.1" level="project" />
+    <orderEntry type="library" name="Maven: net.java.dev.jna:jna-platform:5.3.1" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.13.1" level="project" />
     <orderEntry type="library" name="Maven: jakarta.json:jakarta.json-api:2.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.22" level="project" />
@@ -178,6 +181,5 @@
     <orderEntry type="library" scope="TEST" name="Maven: com.github.docker-java:docker-java-api:3.2.12" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.github.docker-java:docker-java-transport-zerodep:3.2.12" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.github.docker-java:docker-java-transport:3.2.12" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: net.java.dev.jna:jna:5.8.0" level="project" />
   </component>
 </module>

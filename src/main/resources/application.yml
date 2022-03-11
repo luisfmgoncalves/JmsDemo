@@ -11,5 +11,9 @@ elasticsearch:
   user: elastic
   pass: elastic
 
+apm-server:
+  url: http://localhost:8200
+  secret_token: 5940f622-00bf-4909-8551-1e07949320a8
+
 logging:
   file: /Users/luisg/jms_demo.log

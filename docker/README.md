@@ -33,3 +33,9 @@ Start the heartbeat:
 ```
 docker-compose up -d heartbeat
 ```
+
+### APM server
+Start the apm server:
+```
+docker-compose up -d apm-server
+```

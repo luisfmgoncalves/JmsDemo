@@ -59,6 +59,11 @@
 			<version>${elasticsearch.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>co.elastic.apm</groupId>
+			<artifactId>apm-agent-attach</artifactId>
+			<version>1.29.0</version>
+		</dependency>
+		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
 			<version>${jackson.version}</version>
@@ -73,11 +78,6 @@
 			<artifactId>lombok</artifactId>
 			<version>${lombok.version}</version>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>net.logstash.logback</groupId>-->
-<!--			<artifactId>logstash-logback-encoder</artifactId>-->
-<!--			<version>7.0.1</version>-->
-<!--		</dependency>-->
 
 		<!-- test dependencies -->
 		<dependency>

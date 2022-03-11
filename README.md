@@ -60,8 +60,8 @@ To connect to an existing Elasticsearch instance, update `elasticsearch.*` prope
 Otherwise, you can find a docker-compose file in `/docker` to start an instance locally.
 
 ### Monitoring
-Elasticsearch is used not only for storing the messages processed from the events, but also for monitoring purposes.  
-The docker-compose file present in `/docker` can be used to start a Kibana, Logstash and Heartbeat instances which makes monitoring available for this application.  
+Elasticsearch instance is used not only for storing the messages processed from the events, but also for monitoring purposes.  
+The docker-compose file present in `/docker` can be used to start a Kibana, Logstash, Heartbeat and APM-server instances which makes monitoring available for this application.  
 Below is an image showing the different ELK components involved in the monitoring process:
 
 ![Alt text](./docs/Monitoring.svg)  
