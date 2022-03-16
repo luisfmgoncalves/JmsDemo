@@ -1,5 +1,7 @@
 ## docker-compose.yml
-Starts a single node elasticsearch cluster, a kibana, logstash and heartbeat instance with xpack feature enabled
+Starts a single node elasticsearch cluster, a kibana, logstash, heartbeat and APM instances with xpack feature enabled.  
+The configuration for each of the Elastic components is in a folder with the same name.
+The `.env` file contains the current Elastic version in use.
 
 ### Elasticsearch
 Start the elasticsearch:
